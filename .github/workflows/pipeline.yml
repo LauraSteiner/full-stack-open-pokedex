@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - master
-
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
 jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-18.04
@@ -27,3 +29,9 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:8080
+      - name: Bump version and push tag
+          uses: anothrNick/github-tag-action@1.33.0
+          if: ${{ github.event_name == 'push' }}
+          env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
