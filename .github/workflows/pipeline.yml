@@ -29,9 +29,11 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:8080
+      - uses: actions/checkout@v2
       - name: Bump version and push tag
-          uses: anothrNick/github-tag-action@1.33.0
-          if: ${{ github.event_name == 'push' }}
-          env:
+        uses: anothrNick/github-tag-action@1.33.0
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        if: ${{ github.event_name == 'push' }} && !contains( join( COMMIT_MESSAGES), '#skip')
