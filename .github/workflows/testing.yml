@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  a_test_job:
+  showing_github_object:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
